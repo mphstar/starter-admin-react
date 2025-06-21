@@ -1,5 +1,5 @@
 import type { IconBaseProps } from "react-icons/lib";
-import { TbArticle, TbCategory, TbCreditCard, TbHome, TbLogin, TbTag, TbUser } from "react-icons/tb";
+import { TbArticle, TbCategory, TbCreditCard, TbHome, TbLogin, TbRuler, TbTag, TbUser } from "react-icons/tb";
 
 
 export interface NavItem {
@@ -21,29 +21,43 @@ export const navItems: NavItem[] = [
     url: "/admin/dashboard",
     icon: TbHome,
     isActive: false,
-    items: [], // Empty array as there are no child items for Dashboard
+    items: [], 
   },
   {
-    title: "Category",
-    url: "/admin/category",
-    icon: TbCategory,
+    title: "Roles & Permissions",
+    url: "/admin/roles",
+    icon: TbRuler,
     isActive: false,
-    items: [], // No child items
+    items: [], 
   },
   {
-    title: "Tags",
-    url: "/admin/tag",
-    icon: TbTag,
+    title: "Users",
+    url: "/admin/users",
+    icon: TbUser,
     isActive: false,
-    items: [], // No child items
+    items: [], 
   },
-  {
-    title: "Article",
-    url: "/admin/article",
-    icon: TbArticle,
-    isActive: false,
-    items: [], // No child items
-  },
+  // {
+  //   title: "Category",
+  //   url: "/admin/category",
+  //   icon: TbCategory,
+  //   isActive: false,
+  //   items: [], // No child items
+  // },
+  // {
+  //   title: "Tags",
+  //   url: "/admin/tag",
+  //   icon: TbTag,
+  //   isActive: false,
+  //   items: [], // No child items
+  // },
+  // {
+  //   title: "Article",
+  //   url: "/admin/article",
+  //   icon: TbArticle,
+  //   isActive: false,
+  //   items: [], // No child items
+  // },
   {
     title: "Account",
     url: "#", // Placeholder as there is no direct link for the parent

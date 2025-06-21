@@ -1,13 +1,13 @@
-
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 import AppSidebar from "../organisms/app-sidebar";
 import Header from "../organisms/header";
 import { Outlet } from "react-router";
+import CustomConfirmDialog from "../molecules/custom-confirm-dialog";
 
 const AdminLayout = () => {
-
   return (
     <SidebarProvider defaultOpen={true}>
+      <CustomConfirmDialog />
       <AppSidebar />
       <SidebarInset className="overflow-x-hidden">
         <Header />
