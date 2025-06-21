@@ -7,9 +7,21 @@ import { useTheme } from "~/hooks/use-theme";
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();
 
-  const handleThemeToggle = React.useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  }, [setTheme, theme]);
+  const handleThemeToggle = React.useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const root = document.documentElement;
+
+      if (e) {
+        root.style.setProperty("--x", `${e.clientX}px`);
+        root.style.setProperty("--y", `${e.clientY}px`);
+      }
+
+      document.startViewTransition(() => {
+        setTheme(theme === "dark" ? "light" : "dark");
+      });
+    },
+    [setTheme, theme]
+  );
 
   return (
     <Button

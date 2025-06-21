@@ -1,4 +1,3 @@
-"use client";
 import {
   Collapsible,
   CollapsibleContent,
@@ -25,10 +24,9 @@ import * as React from "react";
 
 import { useMediaQuery } from "~/hooks/use-media-query";
 import { navItems } from "~/constant/sidebar";
-import { OrgSwitcher } from "./org-switcher";
+import { OrgSwitcher } from "../molecules/org-switcher";
 import { TbChevronRight, TbCommand, TbPhotoUp } from "react-icons/tb";
-import type { clientLoader } from "~/pages/admin/dashboard";
-import { Link, useLoaderData, useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 export const company = {
   name: "Acme Inc",
   logo: TbPhotoUp,

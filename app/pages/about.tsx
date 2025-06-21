@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+
 import type { Route } from "../+types/root";
 
 export async function clientLoader({ context }: Route.LoaderArgs) {

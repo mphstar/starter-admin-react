@@ -29,16 +29,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const theme = localStorage.getItem("theme");
+                const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+                  .matches
+                  ? "dark"
+                  : "light";
+                const effectiveTheme = theme === "system" ? systemTheme : theme;
+                document.documentElement.classList.add(effectiveTheme);
+              } catch (error) {
+                console.error(error);
+              }
+            `,
+          }}
+        />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body
-        className={cn(
-          "bg-background font-sans antialiased",
-        )}
-      >
+      <body className={cn("bg-background font-sans antialiased")}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -53,7 +66,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
     </html>
   );
 }
-
 
 export default function App() {
   return <Outlet />;

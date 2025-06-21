@@ -1,8 +1,8 @@
 
 import { SidebarTrigger } from "../ui/sidebar";
 import { Separator } from "../ui/separator";
-import { ModeToggle } from "./ThemeToggle/theme-toggle";
-import CtaGithub from "./cta-github";
+import { ModeToggle } from "../atoms/theme-toggle";
+import CtaGithub from "../atoms/cta-github";
 import { Breadcrumbs } from "../molecules/breadcrumbs";
 
 export default function Header() {

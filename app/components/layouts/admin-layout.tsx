@@ -1,7 +1,7 @@
 
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
-import AppSidebar from "./app-sidebar";
-import Header from "./header";
+import AppSidebar from "../organisms/app-sidebar";
+import Header from "../organisms/header";
 import { Outlet } from "react-router";
 
 const AdminLayout = () => {

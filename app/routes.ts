@@ -9,7 +9,7 @@ import {
 export default [
   index("routes/home.tsx"),
 
-  layout("components/layout.tsx", [route("about", "pages/about.tsx")]),
+  layout("components/layout-example.tsx", [route("about", "pages/about.tsx")]),
 
   ...prefix("admin", [
     layout("components/layouts/admin-layout.tsx", [
