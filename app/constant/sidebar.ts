@@ -1,6 +1,16 @@
 import type { IconBaseProps } from "react-icons/lib";
-import { TbArticle, TbCategory, TbCreditCard, TbHome, TbLogin, TbRuler, TbTag, TbUser } from "react-icons/tb";
-
+import {
+  TbArticle,
+  TbBlocks,
+  TbCategory,
+  TbCreditCard,
+  TbHome,
+  TbLogin,
+  TbMasksTheater,
+  TbRuler,
+  TbTag,
+  TbUser,
+} from "react-icons/tb";
 
 export interface NavItem {
   title: string;
@@ -21,21 +31,34 @@ export const navItems: NavItem[] = [
     url: "/admin/dashboard",
     icon: TbHome,
     isActive: false,
-    items: [], 
+    items: [],
+  },
+  {
+    title: "Master Data",
+    url: "#", // Placeholder as there is no direct link for the parent
+    icon: TbBlocks,
+    isActive: true,
+
+    items: [
+      {
+        title: "Kelas",
+        url: "/admin/kelas",
+      },
+    ],
   },
   {
     title: "Roles & Permissions",
     url: "/admin/roles",
     icon: TbRuler,
     isActive: false,
-    items: [], 
+    items: [],
   },
   {
     title: "Users",
     url: "/admin/users",
     icon: TbUser,
     isActive: false,
-    items: [], 
+    items: [],
   },
   // {
   //   title: "Category",

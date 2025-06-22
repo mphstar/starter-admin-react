@@ -15,6 +15,7 @@ export default [
     layout("components/layouts/admin-layout.tsx", [
       route("dashboard", "pages/admin/dashboard/index.tsx"),
       route("roles", "pages/admin/roles/index.tsx"),
+      route("kelas", "pages/admin/master/kelas/index.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;

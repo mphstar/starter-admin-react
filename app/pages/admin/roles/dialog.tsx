@@ -107,7 +107,7 @@ const Dialog = () => {
                             }
                           />
                         </FormControl>
-                        <FormLabel className="font-semibold">
+                        <FormLabel className="font-medium capitalize">
                           Check All
                         </FormLabel>
                       </FormItem>
@@ -124,7 +124,7 @@ const Dialog = () => {
                             return (
                               <FormItem
                                 key={permission}
-                                className="flex flex-row items-start space-x-3 space-y-0"
+                                className="flex flex-row items-start space-x-1 space-y-0"
                               >
                                 <FormControl>
                                   <Checkbox
