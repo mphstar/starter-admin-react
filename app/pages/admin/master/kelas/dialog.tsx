@@ -17,6 +17,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -111,7 +112,8 @@ const Dialog = ({ url }: { url: String }) => {
           </>
         }
       >
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <ScrollArea>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
@@ -183,6 +185,7 @@ const Dialog = ({ url }: { url: String }) => {
             tabIndex={-1}
           ></button>
         </form>
+        </ScrollArea>
       </CustomDialog>
     </Form>
   );

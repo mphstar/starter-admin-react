@@ -94,10 +94,10 @@ const index = () => {
             <TableCell>super-admin</TableCell>
             <TableCell className="max-w-[200px]">
               <div className="flex gap-2 flex-wrap">
-                <Badge>Get User</Badge>
-                <Badge>Tambah User</Badge>
-                <Badge>Update User</Badge>
-                <Badge>Delete User</Badge>
+                <Badge>User</Badge>
+                <Badge>Student</Badge>
+                <Badge>Employee</Badge>
+                <Badge>Kelas</Badge>
               </div>
             </TableCell>
             <TableCell className="text-right">

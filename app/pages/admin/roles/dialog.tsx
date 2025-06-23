@@ -74,10 +74,11 @@ const Dialog = () => {
               name="permissions"
               render={() => {
                 const allPermissions = [
-                  "Get User",
-                  "Create User",
-                  "Update User",
-                  "Delete User",
+                  "User",
+                  "Kelas",
+                  "Tahun Akademik",
+                  "Student",
+                  "Employee"
                 ];
 
                 const isAllSelected = allPermissions.every((perm) =>
