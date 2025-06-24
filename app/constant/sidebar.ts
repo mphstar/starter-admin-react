@@ -41,8 +41,20 @@ export const navItems: NavItem[] = [
 
     items: [
       {
+        title: "Tahun Akademik",
+        url: "/admin/tahun-akademik",
+      },
+      {
+        title: "Semester",
+        url: "/admin/semester",
+      },
+      {
         title: "Kelas",
         url: "/admin/kelas",
+      },
+      {
+        title: "Mata Pelajaran",
+        url: "/admin/mata-pelajaran",
       },
     ],
   },
@@ -81,23 +93,23 @@ export const navItems: NavItem[] = [
   //   isActive: false,
   //   items: [], // No child items
   // },
-  {
-    title: "Account",
-    url: "#", // Placeholder as there is no direct link for the parent
-    icon: TbCreditCard,
-    isActive: true,
+  // {
+  //   title: "Account",
+  //   url: "#", // Placeholder as there is no direct link for the parent
+  //   icon: TbCreditCard,
+  //   isActive: true,
 
-    items: [
-      {
-        title: "Profile",
-        url: "/dashboard/profile",
-        icon: TbUser,
-      },
-      {
-        title: "Login",
-        url: "/",
-        icon: TbLogin,
-      },
-    ],
-  },
+  //   items: [
+  //     {
+  //       title: "Profile",
+  //       url: "/dashboard/profile",
+  //       icon: TbUser,
+  //     },
+  //     {
+  //       title: "Login",
+  //       url: "/",
+  //       icon: TbLogin,
+  //     },
+  //   ],
+  // },
 ];

@@ -17,6 +17,8 @@ export default [
     layout("components/layouts/admin-layout.tsx", [
       route("dashboard", "pages/admin/dashboard/index.tsx"),
       route("roles", "pages/admin/roles/index.tsx"),
+      
+      route("tahun-akademik", "pages/admin/master/tahun-akademik/index.tsx"),
       route("kelas", "pages/admin/master/kelas/index.tsx"),
     ]),
   ]),
