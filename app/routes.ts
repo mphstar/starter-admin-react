@@ -11,6 +11,8 @@ export default [
 
   layout("components/layout-example.tsx", [route("about", "pages/about.tsx")]),
 
+  route("login", "pages/auth/login.tsx"),
+
   ...prefix("admin", [
     layout("components/layouts/admin-layout.tsx", [
       route("dashboard", "pages/admin/dashboard/index.tsx"),
