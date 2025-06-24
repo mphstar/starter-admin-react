@@ -15,6 +15,7 @@ type Props = {
   description?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  className?: string;
 };
 
 const CustomDialog: React.FC<Props> = ({
@@ -22,12 +23,15 @@ const CustomDialog: React.FC<Props> = ({
   description,
   children,
   footer,
+  className,
 }) => {
   const { open, setOpen } = useDialogStore();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px] max-h-[90%] flex flex-col">
+      <DialogContent
+        className={`max-h-[90%] flex flex-col ${className}`}
+      >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}

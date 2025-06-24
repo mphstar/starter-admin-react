@@ -56,6 +56,10 @@ export const navItems: NavItem[] = [
         title: "Mata Pelajaran",
         url: "/admin/mata-pelajaran",
       },
+      {
+        title: "Student",
+        url: "/admin/student",
+      },
     ],
   },
   {

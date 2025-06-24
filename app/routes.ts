@@ -22,6 +22,7 @@ export default [
       route("kelas", "pages/admin/master/kelas/index.tsx"),
       route("semester", "pages/admin/master/semester/index.tsx"),
       route("mata-pelajaran", "pages/admin/master/mata-pelajaran/index.tsx"),
+      route("student", "pages/admin/master/student/index.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;

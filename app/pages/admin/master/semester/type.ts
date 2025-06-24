@@ -17,3 +17,8 @@ export interface SemesterResponse {
     data: Semester[];
   } & PaginationMeta;
 }
+
+export interface SemesterResponseNoPagination {
+  message: string;
+  results: Semester[];
+}
