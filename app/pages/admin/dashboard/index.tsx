@@ -10,15 +10,15 @@ import {
 } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
 
-export async function clientLoader({ request }: Route.LoaderArgs) {
-  const url = new URL(request.url);
+// export async function clientLoader({ request }: Route.LoaderArgs) {
+//   const url = new URL(request.url);
 
-  return { pathname: url.pathname };
-}
+//   return { pathname: url.pathname };
+// }
 
-export function HydrateFallback() {
-  return <div>Loading...</div>;
-}
+// export function HydrateFallback() {
+//   return <div>Loading...</div>;
+// }
 
 const index = () => {
   return (

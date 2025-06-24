@@ -1,6 +1,6 @@
 const MyAccessToken = {
   get: () => {
-    return localStorage.getItem("accessToken") || '1|kWoI8iugnx6gfMBxqRWumlWAfiidzU4DuxfCiq6ua2200177';
+    return localStorage.getItem("accessToken");
   },
 
   set: (token: string) => {

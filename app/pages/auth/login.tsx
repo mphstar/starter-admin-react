@@ -1,7 +1,22 @@
 import { TbFlagCog } from "react-icons/tb";
 import { UserAuthForm } from "./components/user-auth-form";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import MyAccessToken from "~/utils/access-token";
 
 const login = () => {
+  const navigate = useNavigate();
+  const [checking, setChecking] = useState(true);
+  useEffect(() => {
+    const token = MyAccessToken.get();
+    if (token) {
+      navigate("/admin/dashboard", { replace: true });
+    } else {
+      setChecking(false);
+    }
+  }, [navigate]);
+  if (checking) return null;
+
   return (
     <div className="relative container grid h-svh flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0 px-5">
       <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
@@ -22,9 +37,9 @@ const login = () => {
           NCH Project
         </div>
 
-        <div className="relative m-auto">
+        {/* <div className="relative m-auto">
           <TbFlagCog />
-        </div>
+        </div> */}
 
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">

@@ -20,13 +20,20 @@ import {
   SidebarRail,
 } from "~/components/ui/sidebar";
 
-import * as React from "react";
-
 import { useMediaQuery } from "~/hooks/use-media-query";
 import { navItems } from "~/constant/sidebar";
 import { OrgSwitcher } from "../molecules/org-switcher";
-import { TbChevronRight, TbCommand, TbPhotoUp } from "react-icons/tb";
-import { Link, useLocation } from "react-router";
+import {
+  TbChevronRight,
+  TbCommand,
+  TbDoorExit,
+  TbPhotoUp,
+} from "react-icons/tb";
+import { Link, useLocation, useNavigate } from "react-router";
+import { Button } from "../ui/button";
+import { useEffect, useTransition } from "react";
+import MyAccessToken from "~/utils/access-token";
+import { toast } from "sonner";
 export const company = {
   name: "Acme Inc",
   logo: TbPhotoUp,
@@ -41,6 +48,9 @@ const tenants = [
 
 export default function AppSidebar() {
   const { pathname } = useLocation();
+  const router = useNavigate();
+
+  const [loading, startTransition] = useTransition();
 
   const { isOpen } = useMediaQuery();
 
@@ -50,9 +60,37 @@ export default function AppSidebar() {
 
   const activeTenant = tenants[0];
 
-  React.useEffect(() => {
-    // Side effects based on sidebar state changes
-  }, [isOpen]);
+  const handleLogout = () => {
+    toast.loading("Logging out...")
+    startTransition(async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/auth/logout`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${MyAccessToken.get()}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(`Logout failed: ${error.message}`);
+        return;
+      }
+
+      // Successfully logged out
+      toast.success("You have been logged out successfully.");
+      toast.dismiss();
+
+      // Clear authentication tokens or session data
+      MyAccessToken.remove();
+
+      // Redirect to login page
+      router("/login");
+    });
+  };
 
   return (
     <Sidebar variant="floating" collapsible="icon">
@@ -123,8 +161,23 @@ export default function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
-
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip="Logout" isActive={false}>
+              <div
+                onClick={() => {
+                  // Handle logout logic here
+                  handleLogout();
+                }}
+              >
+                <TbDoorExit />
+                <span>Logout</span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
