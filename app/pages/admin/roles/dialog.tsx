@@ -15,26 +15,89 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { useDialogStore } from "~/stores/useDialogStore";
+import GenerateUrl from "~/utils/generate-url";
+import type { PermissionsResponseNoPagination } from "./type";
+import { fetcher } from "~/lib/fetcher";
+import useSWR, { mutate } from "swr";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import MyAccessToken from "~/utils/access-token";
+import { setFormErrorsFromApi } from "~/utils/set-errors-api";
 
-const Dialog = () => {
+const Dialog = ({ url }: { url: string }) => {
   const store = useDialogStore();
 
+  const URL = GenerateUrl(
+    `${import.meta.env.VITE_BASE_URL}/api/permission`,
+    `paginate=false`
+  );
+
+  const { data, error, isLoading } = useSWR<PermissionsResponseNoPagination>(
+    URL,
+    fetcher
+  );
+
+  // Ubah defaultValues agar permissions berupa array of number (id)
   const form = useForm({
-    defaultValues: {
+    values: {
+      id: "",
       name: "",
-      permissions: [] as string[],
+      permission: [] as number[],
     },
   });
 
-  function onSubmit(values: Record<string, any>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  useEffect(() => {
+    if (store.data) {
 
-    form.setError("permissions", {
-      type: "manual",
-      message: "This is a custom error message.",
-    });
+      form.clearErrors();
+      // If there's existing data, set the form values
+      form.setValue("id", store.data.id);
+      form.setValue("name", store.data.name);
+      form.setValue(
+        "permission",
+        store.data.permissions.map((ite: { id: number }) => ite.id)
+      );
+    } else {
+      // Reset the form if no data is available
+      form.reset();
+    }
+  }, [store.data]);
+
+  async function onSubmit(values: Record<string, any>) {
+    const urlEndpoint = store.data
+      ? `/api/role/${store.data.id}`
+      : `/api/role`;
+    const method = store.data ? "PUT" : "POST";
+
+    const fetchData = await fetch(
+      `${import.meta.env.VITE_BASE_URL}${urlEndpoint}`,
+      {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${MyAccessToken.get()}`,
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    if (!fetchData.ok) {
+      const error = await fetchData.json();
+      setFormErrorsFromApi(form, error.errors);
+      return;
+    }
+
+    store.setOpen(false);
+    store.reset();
+    form.reset();
+
+    mutate(url);
+    toast.success(
+      store.data
+        ? "Role updated successfully!"
+        : "Role created successfully!"
+    );
   }
 
   return (
@@ -71,33 +134,45 @@ const Dialog = () => {
 
             <FormField
               control={form.control}
-              name="permissions"
-              render={() => {
-                const allPermissions = [
-                  "User",
-                  "Kelas",
-                  "Tahun Akademik",
-                  "Student",
-                  "Employee"
-                ];
-
-                const isAllSelected = allPermissions.every((perm) =>
-                  form.watch("permissions")?.includes(perm)
-                );
+              name="permission"
+              render={({ field }) => {
+                // field.value: number[] (array of permission ids)
+                const permissionIds = field.value || [];
+                const allPermissionIds = data?.results.map((p) => p.id) || [];
+                const isAllSelected =
+                  allPermissionIds.length > 0 &&
+                  allPermissionIds.every((id) => permissionIds.includes(id));
 
                 const toggleSelectAll = (checked: boolean) => {
                   if (checked) {
-                    form.setValue("permissions", allPermissions);
+                    field.onChange(allPermissionIds);
                   } else {
-                    form.setValue("permissions", []);
+                    field.onChange([]);
                   }
                 };
+
+                if (isLoading) {
+                  return (
+                    <FormItem>
+                      <FormLabel>Loading permissions...</FormLabel>
+                    </FormItem>
+                  );
+                }
+                if (error) {
+                  return (
+                    <FormItem>
+                      <FormLabel>Error loading permissions</FormLabel>
+                      <FormMessage>
+                        {error.message || "Failed to load permissions."}
+                      </FormMessage>
+                    </FormItem>
+                  );
+                }
 
                 return (
                   <FormItem>
                     <div className="flex gap-2 items-center">
                       <FormLabel className="flex-1">Permissions</FormLabel>
-
                       {/* Select All */}
                       <FormItem className="flex items-center space-x-1">
                         <FormControl>
@@ -113,47 +188,36 @@ const Dialog = () => {
                         </FormLabel>
                       </FormItem>
                     </div>
-
                     {/* List Permissions */}
-                    <div className="mt-2 p-4 border-2 border-dashed grid grid-cols-2 md:grid-cols-3 rounded-md gap-2">
-                      {allPermissions.map((permission) => (
-                        <FormField
-                          key={permission}
-                          control={form.control}
-                          name="permissions"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={permission}
-                                className="flex flex-row items-start space-x-1 space-y-0"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(permission)}
-                                    onCheckedChange={(checked) => {
-                                      if (checked) {
-                                        field.onChange([
-                                          ...field.value,
-                                          permission,
-                                        ]);
-                                      } else {
-                                        field.onChange(
-                                          field.value?.filter(
-                                            (val) => val !== permission
-                                          )
-                                        );
-                                      }
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal capitalize">
-                                  {permission}
-                                </FormLabel>
-                                
-                              </FormItem>
-                            );
-                          }}
-                        />
+                    <div className="mt-2 p-4 border-2 border-dashed grid grid-cols-2 md:grid-cols-3 rounded-md gap-2 wrap-anywhere">
+                      {data?.results.map((permission) => (
+                        <FormItem
+                          key={permission.id}
+                          className="flex flex-row items-start space-x-1 space-y-0"
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={permissionIds.includes(permission.id)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  field.onChange([
+                                    ...permissionIds,
+                                    permission.id,
+                                  ]);
+                                } else {
+                                  field.onChange(
+                                    permissionIds.filter(
+                                      (id) => id !== permission.id
+                                    )
+                                  );
+                                }
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal capitalize">
+                            {permission.name.replace(/_/g, " ")}
+                          </FormLabel>
+                        </FormItem>
                       ))}
                     </div>
                     <FormMessage />

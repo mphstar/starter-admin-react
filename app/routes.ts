@@ -21,6 +21,7 @@ export default [
       route("tahun-akademik", "pages/admin/master/tahun-akademik/index.tsx"),
       route("kelas", "pages/admin/master/kelas/index.tsx"),
       route("semester", "pages/admin/master/semester/index.tsx"),
+      route("mata-pelajaran", "pages/admin/master/mata-pelajaran/index.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;

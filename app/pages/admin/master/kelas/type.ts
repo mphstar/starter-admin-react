@@ -16,3 +16,8 @@ export interface KelasResponse {
     data: Kelas[];
   } & PaginationMeta;
 }
+
+export interface KelasResponseNoPagination {
+  message: string;
+  results: Kelas[];
+}

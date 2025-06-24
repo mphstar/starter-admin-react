@@ -34,32 +34,34 @@ import { cn } from "~/lib/utils";
 import Dialog from "./dialog";
 import { useDialogStore } from "~/stores/useDialogStore";
 import { useConfirmDialogStore } from "~/stores/useConfirmDialogStore";
+import type { MataPelajaranResponse } from "./type";
+import useSWR, { mutate } from "swr";
+import { fetcher } from "~/lib/fetcher";
+import TableSkeleton from "~/components/molecules/table-skeleton";
+import GenerateUrl from "~/utils/generate-url";
 import MyAccessToken from "~/utils/access-token";
 import { toast } from "sonner";
-import useSWR, { mutate } from "swr";
 import { useDebounce } from "~/utils/debounce";
-import type { RoleResponse } from "./type";
-import { fetcher } from "~/lib/fetcher";
-import GenerateUrl from "~/utils/generate-url";
-import TableSkeleton from "~/components/molecules/table-skeleton";
 
 const index = () => {
   const store = useDialogStore();
   const dialog = useConfirmDialogStore();
-
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const URL = GenerateUrl(
-    `${import.meta.env.VITE_BASE_URL}/api/role`,
+    `${import.meta.env.VITE_BASE_URL}/api/subject`,
     `page=${page}`,
     `limit=${limit}`,
     `search=${searchQuery}`
   );
 
-  const { data, error, isLoading } = useSWR<RoleResponse>(URL, fetcher);
+  const { data, error, isLoading } = useSWR<MataPelajaranResponse>(
+    URL,
+    fetcher
+  );
 
   if (error) {
     console.log("Error fetching data:", error);
@@ -71,7 +73,7 @@ const index = () => {
 
   const deleteData = async (id: number) => {
     dialog.setOnConfirm(async () => {
-      const url = `${import.meta.env.VITE_BASE_URL}/api/role/${id}`;
+      const url = `${import.meta.env.VITE_BASE_URL}/api/subject/${id}`;
 
       const respone = await fetch(url, {
         method: "DELETE",
@@ -101,12 +103,12 @@ const index = () => {
       <Dialog url={URL} />
       <div className="flex items-start justify-between">
         <Heading
-          title="Roles & Permissions"
-          description="Manage roles & permissions (Server side table functionalities.)"
+          title="Mata Pelajaran"
+          description="Manage mata pelajaran (Server side table functionalities.)"
         />
         <Button
           onClick={() => {
-            store.reset();
+            store.setData(null);
             store.setOpen(true);
           }}
           className={cn(buttonVariants(), "text-xs md:text-sm")}
@@ -116,12 +118,19 @@ const index = () => {
       </div>
       <Separator className="mb-6" />
 
+      {error && (
+        <div className="text-red-500">Error fetching data: {error.message}</div>
+      )}
+
       {isLoading ? (
         <TableSkeleton />
       ) : (
         <>
           <div className="flex items-center gap-2 justify-between mb-4">
-            <Select value="10">
+            <Select
+              value={limit.toString()}
+              onValueChange={(value) => setLimit(Number(value))}
+            >
               <SelectTrigger className="w-[80px]">
                 <SelectValue placeholder="" />
               </SelectTrigger>
@@ -146,13 +155,13 @@ const index = () => {
               <TbSearch className="absolute right-2 h-4 w-4 text-muted-foreground" />
             </div>
           </div>
-
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">No</TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead>Permission</TableHead>
+                <TableHead>Code</TableHead>
+                <TableHead>Kelas</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -163,21 +172,12 @@ const index = () => {
                     {data?.results.from + index}
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
-                  <TableCell className="max-w-[200px]">
-                    {item.permissions ? (
-                      <div className="flex gap-2 flex-wrap">
-                        {item.permissions.map((permission) => (
-                          <Badge key={permission.id} className="capitalize">
-                            {permission.name
-                              .replace(/_/g, " ")
-                              .replace(/([a-z])([A-Z])/g, "$1 $2")}
-                          </Badge>
-                        ))}
-                      </div>
+                  <TableCell>{item.code}</TableCell>
+                  <TableCell>
+                    {item.kelas ? (
+                      <Badge className="capitalize">{item.kelas.name}</Badge>
                     ) : (
-                      <span className="text-muted-foreground">
-                        No Permissions
-                      </span>
+                      "-"
                     )}
                   </TableCell>
                   <TableCell className="text-right">
