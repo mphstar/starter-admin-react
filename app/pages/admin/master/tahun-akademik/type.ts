@@ -14,3 +14,8 @@ export interface TahunAkademikResponse {
     data: TahunAkademik[];
   } & PaginationMeta;
 }
+
+export interface TahunAkademikResponseNoPagination {
+  message: string;
+  results: TahunAkademik[];
+}
