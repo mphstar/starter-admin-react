@@ -110,7 +110,7 @@ const index = () => {
     <div className="flex flex-1 flex-col space-y-2 p-4 px-5">
       <FormDialog url={URL} />
 
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between flex-col md:flex-row space-y-3 md:space-y-0">
         <Heading
           title="Student"
           description="Manage student (Server side table functionalities.)"

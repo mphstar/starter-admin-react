@@ -34,6 +34,7 @@ import { Button } from "../ui/button";
 import { useEffect, useTransition } from "react";
 import MyAccessToken from "~/utils/access-token";
 import { toast } from "sonner";
+import { useDialogStore } from "~/stores/useDialogStore";
 export const company = {
   name: "Acme Inc",
   logo: TbPhotoUp,
@@ -61,7 +62,7 @@ export default function AppSidebar() {
   const activeTenant = tenants[0];
 
   const handleLogout = () => {
-    toast.loading("Logging out...")
+    toast.loading("Logging out...");
     startTransition(async () => {
       const response = await fetch(
         `${import.meta.env.VITE_BASE_URL}/api/auth/logout`,
@@ -91,6 +92,8 @@ export default function AppSidebar() {
       router("/login");
     });
   };
+
+  const dialog = useDialogStore();
 
   return (
     <Sidebar variant="floating" collapsible="icon">
@@ -133,7 +136,10 @@ export default function AppSidebar() {
                               asChild
                               isActive={pathname === subItem.url}
                             >
-                              <Link to={subItem.url}>
+                              <Link
+                                onClick={() => dialog.reset()}
+                                to={subItem.url}
+                              >
                                 <span>{subItem.title}</span>
                               </Link>
                             </SidebarMenuSubButton>
@@ -150,7 +156,7 @@ export default function AppSidebar() {
                     tooltip={item.title}
                     isActive={pathname === item.url}
                   >
-                    <Link to={item.url}>
+                    <Link onClick={() => dialog.reset()} to={item.url}>
                       <Icon />
                       <span>{item.title}</span>
                     </Link>

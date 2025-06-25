@@ -50,6 +50,7 @@ const Dialog = ({ url }: { url: String }) => {
     fetcher
   );
 
+
   const form = useForm({
     values: {
       id: "",
@@ -65,6 +66,7 @@ const Dialog = ({ url }: { url: String }) => {
       phone_number: "",
       nationality: "",
       image: undefined as File | undefined,
+      role: "",
     },
   });
 
@@ -84,6 +86,8 @@ const Dialog = ({ url }: { url: String }) => {
       form.setValue("birth_date", store.data.user.birth_date);
       form.setValue("phone_number", store.data.user.phone_number);
       form.setValue("nationality", store.data.user.nationality);
+
+      form.setValue("role", store.data.user.roles[0]?.id.toString() ?? ""); // Reset image field
     } else {
       // Reset the form if no data is available
       form.reset();
@@ -106,6 +110,7 @@ const Dialog = ({ url }: { url: String }) => {
     if (values.image) {
       formData.append("image", values.image);
     }
+    formData.append("role", values.role);
 
     const urlEndpoint = store.data
       ? `/api/employee/${store.data.id}`
@@ -372,6 +377,49 @@ const Dialog = ({ url }: { url: String }) => {
                         name={field.name}
                         ref={field.ref}
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <FormControl>
+                      {isLoading ? (
+                        <Select disabled>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Loading..." />
+                          </SelectTrigger>
+                        </Select>
+                      ) : error ? (
+                        <div className="text-destructive text-sm">
+                          Failed to load role.
+                        </div>
+                      ) : (
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Pilih Role" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {data?.results.map((item) => (
+                              <SelectItem
+                                key={item.id}
+                                value={item.id.toString()}
+                              >
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
