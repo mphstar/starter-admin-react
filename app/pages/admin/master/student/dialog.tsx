@@ -36,7 +36,7 @@ import type { KelasResponseNoPagination } from "../kelas/type";
 import { PasswordInput } from "~/components/molecules/password-input";
 import type { SemesterResponseNoPagination } from "../semester/type";
 
-const Dialog = ({ url }: { url: String }) => {
+const FormDialog = ({ url }: { url: String }) => {
   const store = useDialogStore();
 
   const URL = GenerateUrl(
@@ -479,4 +479,4 @@ const Dialog = ({ url }: { url: String }) => {
   );
 };
 
-export default Dialog;
+export default FormDialog

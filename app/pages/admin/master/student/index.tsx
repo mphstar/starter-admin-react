@@ -1,6 +1,6 @@
 import { MoreHorizontal } from "lucide-react";
 import React, { useState } from "react";
-import { TbEdit, TbPlus, TbSearch, TbTrash } from "react-icons/tb";
+import { TbEdit, TbFilter, TbPlus, TbSearch, TbTrash } from "react-icons/tb";
 import CustomPagination from "~/components/molecules/custom-pagination";
 import Pagination from "~/components/molecules/custom-pagination";
 import { Badge } from "~/components/ui/badge";
@@ -31,7 +31,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { cn } from "~/lib/utils";
-import Dialog from "./dialog";
+import FormDialog from "./dialog";
 import { useDialogStore } from "~/stores/useDialogStore";
 import { useConfirmDialogStore } from "~/stores/useConfirmDialogStore";
 import type { StudentResponse } from "./type";
@@ -42,6 +42,17 @@ import GenerateUrl from "~/utils/generate-url";
 import MyAccessToken from "~/utils/access-token";
 import { toast } from "sonner";
 import { useDebounce } from "~/utils/debounce";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Label } from "~/components/ui/label";
 
 const index = () => {
   const store = useDialogStore();
@@ -97,21 +108,74 @@ const index = () => {
 
   return (
     <div className="flex flex-1 flex-col space-y-2 p-4 px-5">
-      <Dialog url={URL} />
+      <FormDialog url={URL} />
+
       <div className="flex items-start justify-between">
         <Heading
           title="Student"
           description="Manage student (Server side table functionalities.)"
         />
-        <Button
-          onClick={() => {
-            store.setData(null);
-            store.setOpen(true);
-          }}
-          className={cn(buttonVariants(), "text-xs md:text-sm")}
-        >
-          <TbPlus className="mr-2 h-4 w-4" /> Add New
-        </Button>
+        <div className="flex items-center space-x-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant={"outline"}
+                onClick={() => {}}
+                className={cn("text-xs md:text-sm")}
+              >
+                <TbFilter className="mr-2 h-4 w-4" /> Filter
+              </Button>
+            </DialogTrigger>
+            <DialogContent className={`max-h-[90%] flex flex-col`}>
+              <DialogHeader>
+                <DialogTitle>Filter Mahasiswa</DialogTitle>
+                <DialogDescription>
+                  Gunakan filter untuk mencari data mahasiswa
+                </DialogDescription>
+              </DialogHeader>
+
+              <ScrollArea className="py-4 flex-1 overflow-y-auto">
+                <div className="space-y-4">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="kelas">Kelas</Label>
+                    <Input id="kelas" placeholder="Misal: X IPA 1" />
+                  </div>
+
+                  <div className="flex flex-col gap-2 w-full">
+                    <Label htmlFor="semester">Semester</Label>
+                    <Select>
+                      <SelectTrigger className="w-full" id="semester">
+                        <SelectValue placeholder="Pilih Semester" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Semester 1</SelectItem>
+                        <SelectItem value="2">Semester 2</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="tahun">Tahun Akademik</Label>
+                    <Input id="tahun" placeholder="Contoh: 2024/2025" />
+                  </div>
+                </div>
+              </ScrollArea>
+              <DialogFooter>
+                <Button>Terapkan Filter</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Button
+            onClick={() => {
+              store.setData(null);
+              store.setOpen(true);
+            }}
+            className={cn(buttonVariants(), "text-xs md:text-sm")}
+          >
+            <TbPlus className="mr-2 h-4 w-4" /> Add New
+          </Button>
+        </div>
       </div>
       <Separator className="mb-6" />
 
