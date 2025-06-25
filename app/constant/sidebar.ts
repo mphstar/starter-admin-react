@@ -60,6 +60,10 @@ export const navItems: NavItem[] = [
         title: "Student",
         url: "/admin/student",
       },
+      {
+        title: "Employee",
+        url: "/admin/employee",
+      },
     ],
   },
   {
@@ -69,13 +73,13 @@ export const navItems: NavItem[] = [
     isActive: false,
     items: [],
   },
-  {
-    title: "Users",
-    url: "/admin/users",
-    icon: TbUser,
-    isActive: false,
-    items: [],
-  },
+  // {
+  //   title: "Users",
+  //   url: "/admin/users",
+  //   icon: TbUser,
+  //   isActive: false,
+  //   items: [],
+  // },
   // {
   //   title: "Category",
   //   url: "/admin/category",

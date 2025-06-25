@@ -30,3 +30,8 @@ export interface PermissionsResponseNoPagination {
   message: string;
   results: Permissions[];
 }
+
+export interface RoleResponseNoPagination {
+  message: string;
+  results: Role[];
+}
